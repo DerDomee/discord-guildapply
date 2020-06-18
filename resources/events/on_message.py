@@ -5,6 +5,7 @@ from discord import message
 from discord import role
 from resources.commands import guildapply
 from resources.commands import admincommands
+from resources.commands import botcommands
 
 
 def _strip_start(text, prefix):
@@ -33,6 +34,7 @@ async def on_message(message):
             data['mod_channel'] = ""
             data['log_channel'] = ""
             data['user_channels'] = []
+            data['generic_bot_channels'] = []
             save_data()
     elif msg.startswith(mentionprefix):
         msg = _strip_start(msg, mentionprefix).strip()
@@ -40,6 +42,8 @@ async def on_message(message):
             await guildapply.invoke(message)
         elif message.channel.id == data['admin_channel']:
             await admincommands.resolve(message)
+        elif message.channel.id in data['generic_bot_channels']:
+            await botcommands.resolve(message)
 
     elif message.channel.id in data['user_channels']:
         if not message.author.permissions_in(message.channel).administrator:

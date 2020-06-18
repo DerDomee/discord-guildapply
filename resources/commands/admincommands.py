@@ -56,6 +56,43 @@ async def remove_userchannel(message, msgstack):
         await error_and_delete(message)
 
 
+async def add_genericbotchannel(message, msgstack):
+    if len(msgstack) is not 1:
+        await error_and_delete(message)
+    elif msgstack[0].startswith("<#") and msgstack[0].endswith(">"):
+        channelid = _strip_start(msgstack[0], "<#")
+        channelid = _strip_end(channelid, ">")
+        channelid = int(channelid)
+        print(channelid)
+        if client.guilds[0].get_channel(channelid) is not None and \
+                channelid not in data['generic_bot_channels']:
+            data['generic_bot_channels'].append(channelid)
+            save_data()
+            await success_and_delete(message)
+        else:
+            await error_and_delete(message)
+    else:
+        await error_and_delete(message)
+
+
+async def remove_genericbotchannel(message, msgstack):
+    if len(msgstack) is not 1:
+        await error_and_delete(message)
+    elif msgstack[0].startswith("<#") and msgstack[0].endswith(">"):
+        channelid = _strip_start(msgstack[0], "<#")
+        channelid = _strip_end(channelid, ">")
+        channelid = int(channelid)
+        print(channelid)
+        if channelid in data['generic_bot_channels']:
+            data['generic_bot_channels'].remove(channelid)
+            save_data()
+            await success_and_delete(message)
+        else:
+            await error_and_delete(message)
+    else:
+        await error_and_delete(message)
+
+
 async def set_logchannel(message, msgstack):
     if len(msgstack) is not 1:
         await error_and_delete(message)
@@ -137,5 +174,9 @@ async def resolve(message):
         await set_logchannel(message, msgstack[2:])
     elif msgstack[1] == "set_adminchannel":
         await set_adminchannel(message, msgstack[2:])
+    elif msgstack[1] == "add_generic_botchannel":
+        await add_genericbotchannel(message, msgstack[2:])
+    elif msgstack[1] == "remove_generic_botchannel":
+        await remove_genericbotchannel(message, msgstack[2:])
     elif msgstack[1] == "stop":
         await stop_bot(message, msgstack[2:])
