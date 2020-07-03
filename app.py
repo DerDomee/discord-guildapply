@@ -1,7 +1,7 @@
 import os
 from resources import client
 
-discord_bot_token = os.getenv('DISCORD_BOTTOKEN', default=None)
+discord_bot_token = os.getenv('DD_DISCORD_BOTTOKEN', default=None)
 
 if discord_bot_token is None:
     print("No Discord bot token found!")
