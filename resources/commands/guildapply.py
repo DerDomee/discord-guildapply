@@ -8,8 +8,9 @@ from resources.commands import success_and_delete, error_and_delete
 
 async def invoke(message):
     msg = message.content.split()
-    regex = r"^(https:\/\/sky\.lea\.moe\/stats\/)([\w\-\.\:\,\%\&]+)(\/)([\w\-\.\:\,\%\&]+)(\/{0,1})$"
-    if not re.match(regex, msg[1]):
+    regex1 = r"^(https:\/\/sky\.lea\.moe\/stats\/)([\w\-\.\:\,\%\&]+)(\/)([\w\-\.\:\,\%\&]+)(\/{0,1})$"
+    regex2 = r"^(https:\/\/sky\.derdom\.ee\/stats\/)([\w\-\.\:\,\%\&]+)(\/)([\w\-\.\:\,\%\&]+)(\/{0,1})$"
+    if (not re.match(regex1, msg[1]) and (not re.match(regex2, msg[1]))):
         await error_and_delete(message)
     else:
         embed = Embed(
