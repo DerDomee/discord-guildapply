@@ -14,7 +14,8 @@ async def invoke(message):
         await error_and_delete(message)
     else:
         embed = Embed(
-            title="Gildenbewerbung von " + str(message.author),
+            title="Neue Gildenbewerbung",
+            description=message.author.mention + " hat sich für die Gilde beworben.",
             color=0xefaf21)
         embed.add_field(
             name="Profile URL",
@@ -25,6 +26,8 @@ async def invoke(message):
                 name="Benutzerdefinierte Nachricht",
                 value=' '.join(msg[2:]),
                 inline=False)
-        await client.guilds[0].get_channel(data['mod_channel']).send(
+        modinfo = await client.guilds[0].get_channel(data['mod_channel']).send(
             embed=embed)
+        await modinfo.add_reaction("✅")
+        await modinfo.add_reaction("❌")
         await success_and_delete(message)
